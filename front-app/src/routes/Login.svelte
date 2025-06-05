@@ -2,8 +2,20 @@
     let email = "";
     let password = "";
 
-    const login = () => {
-        console.log({ email, password });
+    const login = async () => {
+        const res = await fetch("http://localhost:3000/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error);
+        } else {
+            localStorage.setItem("token", data.token);
+            alert("Login successful");
+        }
     };
 </script>
 
