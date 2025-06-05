@@ -14,13 +14,21 @@
 
     const data = await res.json();
     if (!res.ok) return alert(data.error);
-    alert("Registered successfully");
+
+    // ✅ Auto-redirect to form-home (already logged in via cookie)
+    window.location.href = "/forms-home";
   };
 </script>
 
 <form on:submit|preventDefault={register}>
   <h2>Register</h2>
-  <input type="text" bind:value={name} placeholder="Full Name" required />
+  <input
+    type="text"
+    bind:value={name}
+    placeholder="Full Name"
+    required
+    minlength="3"
+  />
   <input type="email" bind:value={email} placeholder="Email" required />
   <input
     type="password"
