@@ -11,9 +11,7 @@
 
     const data = await res.json();
     if (!res.ok) return alert(data.error);
-
-    // ✅ Save token + Redirect to /forms-home
-    localStorage.setItem("token", data.token);
+    
     window.location.href = "/forms-home";
   };
 </script>

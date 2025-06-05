@@ -1,31 +1,7 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  let forms: { _id: string; title: string }[] = [];
-
-  onMount(async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      window.location.href = "/login";
-      return;
-    }
-
-    const res = await fetch("/api/forms-home", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-
-    if (res.status === 401) {
-      alert("Unauthorized");
-      window.location.href = "/login";
-      return;
-    }
-
-    forms = await res.json();
-  });
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-  };
+  export let data;
+  const user = data.user;
+  const forms: { id: string; title: string }[] = data.forms;
 </script>
 
 <svelte:head>
@@ -33,21 +9,28 @@
 </svelte:head>
 
 <header>
-  <div class="header-content">
-    <h2>All Forms</h2>
-    <button on:click={logout}><img src="/images/disconnect.png" alt="src"></button>
-  </div>
+  <h2>Welcome, {user.email}</h2>
+  <form method="POST" action="/api/logout">
+    <button type="submit">Logout</button>
+  </form>
 </header>
 
-<ul>
-  {#each forms as form}
-    <li>{form.title}</li>
-  {/each}
-</ul>
+<main>
+  <h3>Your Forms</h3>
+  {#if forms.length > 0}
+    <ul>
+      {#each forms as form}
+        <li>{form.title}</li>
+      {/each}
+    </ul>
+  {:else}
+    <p>No forms yet.</p>
+  {/if}
 
-<a href="/create">
-  <button>Create New Form</button>
-</a>
+  <a href="/create">
+    <button>Create New Form</button>
+  </a>
+</main>
 
 <style>
   header {
@@ -68,9 +51,9 @@
     padding: 0 2rem;
   }
 
-  h2{
+  h2 {
+    width: 20%;
     font-size: 1.8rem;
-    font-weight: 500;
     color: #3c2e5a;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       sans-serif;
