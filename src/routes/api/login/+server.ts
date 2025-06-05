@@ -1,9 +1,10 @@
 import type { RequestHandler } from './$types';
+import { JWT_SECRET } from '$env/static/private';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import db from '$lib/db';
 
-const SECRET = process.env.JWT_SECRET!;
+const SECRET = JWT_SECRET;
 
 export const POST: RequestHandler = async ({ request }) => {
   const { email, password } = await request.json();
