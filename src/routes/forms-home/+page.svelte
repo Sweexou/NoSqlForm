@@ -9,14 +9,24 @@
 </svelte:head>
 
 <header>
-  <h2>Welcome, {user.email}</h2>
-  <form method="POST" action="/api/logout">
-    <button type="submit">Logout</button>
-  </form>
+  <div class="header-content">
+    <h2>Welcome, {user.name}</h2>
+    <form method="POST" action="/api/logout">
+      <button type="submit">
+        <img src="images/disconnect.png" alt="Logout" />
+      </button>
+    </form>
+  </div>
 </header>
 
 <main>
-  <h3>Your Forms</h3>
+  <div class="main-header">
+    <h3>Your Forms</h3>
+    <a href="/create">
+      <button>Create New Form</button>
+    </a>
+  </div>
+
   {#if forms.length > 0}
     <ul>
       {#each forms as form}
@@ -26,10 +36,6 @@
   {:else}
     <p>No forms yet.</p>
   {/if}
-
-  <a href="/create">
-    <button>Create New Form</button>
-  </a>
 </main>
 
 <style>
@@ -49,6 +55,27 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
+  }
+
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+  }
+
+  .main-header {
+    max-width: 600px;
+    margin: 2rem auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .main-header h3 {
+    margin: 0;
   }
 
   h2 {
@@ -93,7 +120,6 @@
 
   a button {
     display: block;
-    margin: 2rem auto;
     background: #007bff;
     color: white;
     padding: 0.75rem 1.5rem;

@@ -5,14 +5,23 @@ import db from '$lib/db';
 import { JWT_SECRET } from '$env/static/private';
 
 export const POST: RequestHandler = async ({ request }) => {
-  const { email, password } = await request.json();
-  const user = await db.users.findOne({ email });
-  if (!user) return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+  const { identifier, password } = await request.json();
+
+  // Try to find by email or username
+  const user = await db.users.findOne({
+    $or: [{ email: identifier }, { name: identifier }]
+  });
+
+  if (!user) {
+    return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+  }
 
   const valid = await bcrypt.compare(password, user.password);
-  if (!valid) return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+  if (!valid) {
+    return new Response(JSON.stringify({ error: 'Invalid credentials' }), { status: 401 });
+  }
 
-  const token = jwt.sign({ id: user._id, email }, JWT_SECRET, { expiresIn: '1h' });
+  const token = jwt.sign({ id: user._id,name: user.name, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
 
   return new Response(JSON.stringify({ success: true }), {
     status: 200,

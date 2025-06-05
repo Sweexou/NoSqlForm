@@ -1,24 +1,29 @@
 <script lang="ts">
-  let email = "";
+  let identifier = "";
   let password = "";
 
   const login = async () => {
     const res = await fetch("/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ identifier, password }),
     });
 
     const data = await res.json();
     if (!res.ok) return alert(data.error);
-    
+
     window.location.href = "/forms-home";
   };
 </script>
 
 <form on:submit|preventDefault={login}>
   <h2>Login</h2>
-  <input type="email" bind:value={email} placeholder="Email" required />
+  <input
+    type="text"
+    bind:value={identifier}
+    placeholder="Email or Username"
+    required
+  />
   <input
     type="password"
     bind:value={password}
