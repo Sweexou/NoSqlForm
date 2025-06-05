@@ -25,4 +25,6 @@
 
 <p style="text-align: center;">
   No account? <a href="/register">Register here</a>
+  <a href="/form-builder">Form Builder</a>
 </p>
+

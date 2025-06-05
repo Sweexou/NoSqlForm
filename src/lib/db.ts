@@ -1,8 +1,10 @@
 import { MongoClient } from 'mongodb';
+import { MONGO_URI } from '$env/static/private';
 
-const client = new MongoClient(process.env.MONGO_URI!);
+const client = new MongoClient(MONGO_URI);
 await client.connect();
 
 export default {
-  users: client.db('myapp').collection('users')
+  users: client.db().collection('users'),
+  questionnaires: client.db().collection('questionnaires'),
 };
