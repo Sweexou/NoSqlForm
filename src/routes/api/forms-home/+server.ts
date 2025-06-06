@@ -10,7 +10,6 @@ export const GET: RequestHandler = async ({ request }) => {
 
   if (!token) {
     throw redirect(302, '/login');
-    return new Response(JSON.stringify({ error: 'Missing token' }), { status: 401 });
   }
 
   try {

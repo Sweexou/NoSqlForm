@@ -80,34 +80,33 @@
     draggedIndex = null;
   }
 
-  // Save to backend
   async function saveForm() {
-    const formToSave = {
-      title: formName,
-      description: formDescription,
-      authorId: "YOUR_USER_ID", // Replace with actual user id in production
-      createdAt: new Date(),
-      questions: questions.map(q => ({
-        questionId: crypto.randomUUID(),
-        type: q.type === 'short' ? 'open' : q.type,
-        label: q.text,
-        options: (q.type === 'single' || q.type === 'multiple') ? q.options : [],
-        isRequired: q.required
-      }))
-    };
+  const formToSave = {
+    title: formName,
+    description: formDescription,
+    createdAt: new Date(),
+    questions: questions.map(q => ({
+      questionId: crypto.randomUUID(),
+      type: q.type === 'short' ? 'open' : q.type,
+      label: q.text,
+      options: (q.type === 'single' || q.type === 'multiple') ? q.options : [],
+      isRequired: q.required
+    }))
+  };
 
-    const res = await fetch('/api/forms', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formToSave)
-    });
+  const res = await fetch('/api/forms', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formToSave)
+  });
 
-    if (res.ok) {
-      alert("Form saved!");
-    } else {
-      alert("Error saving form");
-    }
+  if (res.ok) {
+    alert("Form saved!");
+  } else {
+    alert("Error saving form");
   }
+}
+
 </script>
 
 <div class="page-bg">
