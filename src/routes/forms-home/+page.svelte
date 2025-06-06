@@ -20,22 +20,24 @@
 </header>
 
 <main>
-  <div class="main-header">
-    <h3>Your Forms</h3>
-    <a href="/create">
+  <div class="create-button">
+    <a href="/form-builder">
       <button>Create New Form</button>
     </a>
   </div>
-
-  {#if forms.length > 0}
-    <ul>
-      {#each forms as form}
-        <li>{form.title}</li>
-      {/each}
-    </ul>
-  {:else}
-    <p>No forms yet.</p>
-  {/if}
+  
+  <div class="form-list">
+    <h3>Your Forms</h3>
+    {#if forms.length > 0}
+      <ul>
+        {#each forms as form}
+          <li>{form.title}</li>
+        {/each}
+      </ul>
+    {:else}
+      <p>No forms yet.</p>
+    {/if}
+  </div>
 </main>
 
 <style>
@@ -66,16 +68,21 @@
     padding: 0 2rem;
   }
 
-  .main-header {
-    max-width: 600px;
-    margin: 2rem auto;
+  main {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
+    padding: 2rem;
   }
 
-  .main-header h3 {
-    margin: 0;
+  .form-list {
+    margin-top: 1rem;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .create-button {
+    margin-bottom: 1rem;
   }
 
   h2 {

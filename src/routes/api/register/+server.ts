@@ -7,9 +7,12 @@ import { JWT_SECRET } from '$env/static/private';
 export const POST: RequestHandler = async ({ request }) => {
   const { name, email, password } = await request.json();
 
-  const existing = await db.users.findOne({ email });
+  const existing = await db.users.findOne({
+    $or: [{ email }, { name }]
+  });
+
   if (existing) {
-    return new Response(JSON.stringify({ error: 'User already exists' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Email or name already in use' }), { status: 400 });
   }
 
   const hashed = await bcrypt.hash(password, 10);
