@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+
   type QuestionType = 'short' | 'single' | 'multiple';
 
   interface Question {
@@ -87,7 +89,7 @@
       createdAt: new Date(),
       questions: questions.map(q => ({
         questionId: crypto.randomUUID(),
-        type: q.type === 'short' ? 'open' : q.type, // match your backend model
+        type: q.type === 'short' ? 'open' : q.type,
         label: q.text,
         options: (q.type === 'single' || q.type === 'multiple') ? q.options : [],
         isRequired: q.required
@@ -109,9 +111,10 @@
 </script>
 
 <div class="page-bg">
-  <!-- Header with form name and share button -->
+  <!-- Header with back button, form name, and share button -->
   <header class="main-header">
     <div class="header-content">
+      <a class="back-btn" href="/forms-home" aria-label="Back to Home">← Home</a>
       <div class="header-title">{formName}</div>
       <button class="share-btn" on:click={shareForm}>Share Form</button>
     </div>
@@ -258,12 +261,31 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.5rem 2rem;
+    gap: 1.5rem;
+  }
+  .back-btn {
+    color: #7b5cff;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 0.4rem 1.1rem 0.4rem 0.2rem;
+    border-radius: 5px;
+    transition: background 0.15s;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .back-btn:hover {
+    background: #ece6fa;
+    text-decoration: underline;
   }
   .header-title {
     font-size: 1.8rem;
     font-weight: 500;
     color: #3c2e5a;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    flex: 1;
+    text-align: center;
   }
   .share-btn {
     background: #7b5cff;
