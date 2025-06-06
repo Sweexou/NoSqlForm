@@ -2,22 +2,24 @@ import type { RequestHandler } from './$types';
 import jwt from 'jsonwebtoken';
 import db from '$lib/db';
 import { JWT_SECRET } from '$env/static/private';
-import { redirect } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async ({ request }) => {
-  const auth = request.headers.get('authorization');
-  const token = auth?.split(' ')[1];
-
+export const GET: RequestHandler = async ({ cookies }) => {
+  const token = cookies.get('token');
   if (!token) {
-    throw redirect(302, '/login');
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   }
 
   try {
-    jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as { id: string };
+    console.log(decoded.id)
+    // Only get forms for this user
+    const forms = await db.questionnaires
+      .find({ authorId: decoded.id.toString() })
+      .project({ title: 1 })
+      .toArray();
+
+    return new Response(JSON.stringify(forms), { status: 200 });
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid token' }), { status: 401 });
   }
-
-  const forms = await db.questionnaires.find().project({ title: 1 }).toArray();
-  return new Response(JSON.stringify(forms), { status: 200 });
 };

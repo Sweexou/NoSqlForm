@@ -7,7 +7,12 @@ export const load: PageServerLoad = async ({ locals }) => {
     throw redirect(302, '/login');
   }
 
-  const forms = await db.questionnaires.find({}, { projection: { _id: 1, title: 1 } }).toArray();
+  const userId = locals.user.id;
+
+  const forms = await db.questionnaires.find(
+    { authorId: userId },
+    { projection: { _id: 1, title: 1 } }
+  ).toArray();
 
   return {
     user: locals.user,
