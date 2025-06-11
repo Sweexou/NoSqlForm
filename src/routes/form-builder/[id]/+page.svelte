@@ -4,15 +4,30 @@
   type QuestionType = 'short' | 'single' | 'multiple';
 
   interface Question {
+    questionId?: string;
     text: string;
     type: QuestionType;
     options: string[];
     required: boolean;
+    label?: string;
+    isRequired?: boolean;
   }
 
-  let formName: string = "Forms name";
-  let formDescription: string = "Description du formulaire";
-  let questions: Question[] = [];
+  export let data;
+
+  // Initialize state from loaded form
+  let formName = data.form?.title ?? '';
+  let formDescription = data.form?.description ?? '';
+  let questions: Question[] = data.form?.questions
+    ? data.form.questions.map((q: any) => ({
+        questionId: q.questionId,
+        text: q.label ?? q.text ?? '',
+        type: q.type === 'open' ? 'short' : q.type,
+        options: q.options ?? [],
+        required: q.isRequired ?? q.required ?? false
+      }))
+    : [];
+  let formId = data.form?._id;
 
   const types: { value: QuestionType; label: string }[] = [
     { value: 'short', label: 'Short Answer' },
@@ -86,7 +101,6 @@
       return;
     }
 
-    // Check for empty question titles
     const emptyTitleIndex = questions.findIndex(q => !q.text.trim());
     if (emptyTitleIndex !== -1) {
       alert(`Question ${emptyTitleIndex + 1} title cannot be empty`);
@@ -94,11 +108,12 @@
     }
 
     const formToSave = {
+      _id: formId,
       title: formName,
       description: formDescription,
-      createdAt: new Date(),
+      createdAt: data.form?.createdAt ?? new Date(),
       questions: questions.map(q => ({
-        questionId: crypto.randomUUID(),
+        questionId: q.questionId ?? crypto.randomUUID(),
         type: q.type === 'short' ? 'open' : q.type,
         label: q.text,
         options: (q.type === 'single' || q.type === 'multiple') ? q.options : [],
@@ -106,8 +121,11 @@
       }))
     };
 
-    const res = await fetch('/api/forms', {
-      method: 'POST',
+    const method = formId ? 'PUT' : 'POST';
+    const url = formId ? `/api/forms/${formId}` : '/api/forms';
+
+    const res = await fetch(url, {
+      method,
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formToSave)
     });
@@ -118,20 +136,17 @@
       alert("Error saving form");
     }
   }
-
 </script>
 
 <div class="page-bg">
-  <!-- Header with back button, form name, and share button -->
   <header class="main-header">
     <div class="header-content">
-      <a class="back-btn" href="/forms-home" aria-label="Back to Home">← Home</a>
-      <div class="header-title">{formName}</div>
+      <a class="back-btn" href="/forms-home">← Home</a>
+      <div class="header-title">Editing: {formName}</div>
       <button class="share-btn" on:click={shareForm}>Share Form</button>
     </div>
   </header>
 
-  <!-- Form card under header -->
   <div class="form-card">
     <input
       class="form-card-title"
@@ -157,7 +172,6 @@
       <div 
         class="question-card"
         draggable="true"
-        role="listitem"
         on:dragstart={(e) => handleDragStart(e, qIdx)}
         on:dragover={handleDragOver}
         on:drop={(e) => handleDrop(e, qIdx)}
