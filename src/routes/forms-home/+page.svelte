@@ -31,7 +31,22 @@
     {#if forms.length > 0}
       <ul>
         {#each forms as form}
-          <li>{form.title}</li>
+          <li class="form-item">
+            <div class="form-info">
+              <h4>{form.title}</h4>
+            </div>
+            <div class="form-actions">
+              <a href="/form-builder/{form.id}" class="edit-btn">
+                <button>Edit</button>
+              </a>
+              <a href="/forms/{form.id}/responses" class="responses-btn">
+                <button>View Responses</button>
+              </a>
+              <a href="/form/{form.id}" class="share-btn" target="_blank">
+                <button>Preview</button>
+              </a>
+            </div>
+          </li>
         {/each}
       </ul>
     {:else}
@@ -50,15 +65,7 @@
     top: 0;
     z-index: 100;
   }
-  .header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 2rem;
-  }
-
+  
   .header-content {
     max-width: 1200px;
     margin: 0 auto;
@@ -78,7 +85,7 @@
   .form-list {
     margin-top: 1rem;
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
   }
 
   .create-button {
@@ -86,28 +93,75 @@
   }
 
   h2 {
-    width: 20%;
     font-size: 1.8rem;
     color: #3c2e5a;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
 
   ul {
     list-style: none;
     padding: 0;
     margin: 2rem auto;
-    max-width: 600px;
+    max-width: 800px;
   }
 
-  li {
+  .form-item {
     background: white;
-    padding: 1rem;
+    padding: 1.5rem;
     margin-bottom: 1rem;
     border-left: 5px solid #007bff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
-    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .form-info h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .form-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+
+  .edit-btn button {
+    background: #28a745;
+    color: white;
+  }
+
+  .edit-btn button:hover {
+    background: #218838;
+  }
+
+  .responses-btn button {
+    background: #17a2b8;
+    color: white;
+  }
+
+  .responses-btn button:hover {
+    background: #138496;
+  }
+
+  .share-btn button {
+    background: #ffc107;
+    color: #212529;
+  }
+
+  .share-btn button:hover {
+    background: #e0a800;
   }
 
   header button {
@@ -116,6 +170,7 @@
     border-radius: 6px;
     padding: 4px 2px 0px 4px;
   }
+
   header button img {
     width: 35px;
     height: 35px;
@@ -125,7 +180,7 @@
     background: #72727269;
   }
 
-  a button {
+  .create-button a button {
     display: block;
     background: #007bff;
     color: white;
@@ -136,7 +191,7 @@
     cursor: pointer;
   }
 
-  a button:hover {
+  .create-button a button:hover {
     background: #0056b3;
   }
 </style>
