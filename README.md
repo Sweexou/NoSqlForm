@@ -1,42 +1,66 @@
-# sv
+# NoSQLForm - Docker Setup
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Ce projet est une application SvelteKit connectée à MongoDB, entièrement dockerisée.
 
-## Creating a project
+## 🚀 Prérequis
 
-If you're seeing this, you've probably already done this step. Congrats!
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-```bash
-# create a new project in the current directory
-npx sv create
+## 📦 Structure du projet
 
-# create a new project in my-app
-npx sv create my-app
+```
+.
+├── docker/
+│   ├── Dockerfile.mongo        # Image Mongo personnalisée
+│   └── mongo-init.js           # Script d'initialisation
+├── Dockerfile                  # Image de l'app SvelteKit
+├── docker-compose.yaml         # Composition des services
+├── .env                        # Variables d'environnement
+└── ...
 ```
 
-## Developing
+## ⚙️ Lancement du projet
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
+1. **Cloner le projet**
 ```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+git clone https://github.com/Sweexou/NoSqlForm.git
+cd NoSQLForm
 ```
 
-## Building
-
-To create a production version of your app:
-
+2. **Construire et lancer les conteneurs**
 ```bash
-npm run build
+docker-compose down -v  # (Optionnel) Nettoyage complet
+docker-compose up --build
 ```
 
-You can preview the production build with `npm run preview`.
+3. **Accéder à l'application**
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- Frontend : [http://localhost:3000](http://localhost:3000)
+- MongoDB : `mongodb://admin:admin123@localhost:27017/forms_db?authSource=admin`
 
+## 🔐 Variables d'environnement
 
+Exemple de fichier `.env` :
 
-to access editing form go to : http://localhost:5173/form-builder/IdOfTheFormYouWantToEdit
+```
+MONGO_URI=mongodb://admin:admin123@mongo:27017/forms_db?authSource=admin
+JWT_SECRET=yourSuperSecretKey
+```
+
+> ⚠️ Ce fichier est monté automatiquement dans le conteneur via `docker-compose.yaml`.
+
+## 🧼 Nettoyage
+
+```bash
+docker-compose down -v
+```
+
+## 🐞 Débogage
+
+- Assurez-vous que le port `3000` est libre.
+- Utilisez `docker logs <container_name>` pour consulter les logs.
+
+---
+
+Puis rdv sur `http://localhost:3000/`
