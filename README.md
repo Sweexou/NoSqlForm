@@ -29,6 +29,8 @@ cd NoSQLForm
 ```
 
 2. **Construire et lancer les conteneurs**
+   
+   first do `npm install `
 ```bash
 docker-compose down -v  # (Optionnel) Nettoyage complet
 docker-compose up --build
